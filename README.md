@@ -3,7 +3,7 @@
 
 "You thought it was just a coffee shop, but it was me, a Web Development 2 Project!"
 
-#📑 Table of Contents
+# 📑 Table of Contents
 
 About The Project
 
@@ -11,15 +11,7 @@ Features
 
 Tech Stack
 
-Installation & Setup
-
-Screenshots
-
-Future Improvements
-
-The Team
-
-#📖 About The Project
+# 📖 About The Project
 
 JoJo's Bizarre Coffee is a full-stack web application developed for our Web Development 2 subject. It serves as an e-commerce platform for a fictional, anime-themed coffee shop.
 
@@ -39,7 +31,7 @@ Admin Dashboard: CRUD capabilities for managing products (Add, Edit, Delete coff
 
 Responsive Design: Looks great on Desktop and Mobile (even inside a Speedwagon Foundation vehicle).
 
-#🛠️ Tech Stack
+# 🛠️ Tech Stack
 
 This project was built using the following "Stands" (Technologies):
 
