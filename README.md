@@ -1,6 +1,26 @@
+<div align="center">
+
 ☕ JoJo's Bizarre Coffee
 
-"You thought it was just a coffee shop, but it was me, a WEBDEV2 PROJECT!"
+"You thought it was just a coffee shop, but it was me, a Web Development 2 Project!"
+
+</div>
+
+📑 Table of Contents
+
+About The Project
+
+Features
+
+Tech Stack
+
+Installation & Setup
+
+Screenshots
+
+Future Improvements
+
+The Team
 
 📖 About The Project
 
@@ -26,10 +46,22 @@ Responsive Design: Looks great on Desktop and Mobile (even inside a Speedwagon F
 
 This project was built using the following "Stands" (Technologies):
 
-Frontend: HTML5, CSS3, JavaScript
+Component
 
-Backend: PHP (Vanilla)
+Technology
 
-Database: MySQL
+Frontend
 
-Server Environment: XAMPP / WAMP (Apache)
+HTML5, CSS3, JavaScript
+
+Backend
+
+PHP (Vanilla)
+
+Database
+
+MySQL
+
+Server
+
+XAMPP / WAMP (Apache)
