@@ -17,7 +17,7 @@ JoJo's Bizarre Coffee is a full-stack web application developed for our Web Deve
 
 The goal of this project was to demonstrate proficiency in server-side scripting, database management, and dynamic content rendering.
 
-🌟 Features
+# 🌟 Features
 
 User Authentication: Secure registration and login system for customers and admins.
 
