@@ -1,0 +1,8 @@
+admin: admin
+pass: admin123
+
+user: demsdemi
+pass: demi123
+
+user: demi_elago
+pass: demi123
