@@ -13,7 +13,7 @@ Tech Stack
 
 # 📖 About The Project
 
-JoJo's Bizarre Coffee is a full-stack web application developed for our Web Development 2 subject. It serves as an e-commerce platform for a fictional, anime-themed coffee shop.
+JoJo's Bizarre Coffee is a full-stack web application developed for the real cafe residing in Marikina. It serves as an e-commerce platform for a fictional, anime-themed coffee shop. Which serves lots of JoJo themed coffee items while making sure the franchise remains alive.
 
 The goal of this project was to demonstrate proficiency in server-side scripting, database management, and dynamic content rendering.
 
