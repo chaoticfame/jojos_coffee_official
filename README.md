@@ -53,4 +53,4 @@ MySQL
 
 Server
 
-XAMPP / WAMP (Apache)
+Laragon
