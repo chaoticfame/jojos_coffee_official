@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
@@ -7,15 +7,6 @@ export default function Header({ currentView, setCurrentView }) {
   const { count } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const navigateTo = (view, extraParams = null) => {
     setCurrentView(view, extraParams);
@@ -24,21 +15,18 @@ export default function Header({ currentView, setCurrentView }) {
   };
 
   return (
-    <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
+    <header className="site-header">
       <div className="container header-inner">
         <a 
           className="brand" 
           href="#home" 
           onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
         >
-          <img src="/assets/jojo.png" alt="JoJo's logo" className="logo-small" />
+          <img src="assets/jojo.png" alt="JoJo's logo" className="logo-small" />
           <div className="brand-text">
             <span className="brand-top">JoJo's</span>
             <span className="brand-sub">Bizarre <strong>COFFEE</strong></span>
           </div>
-          <span className="menacing-stamp" style={{ marginLeft: '6px' }}>
-            杜王町
-          </span>
         </a>
 
         <nav className={`main-nav ${menuOpen ? 'open' : ''}`} id="mainNav">
@@ -70,15 +58,6 @@ export default function Header({ currentView, setCurrentView }) {
                 About JoJo
               </a>
             </li>
-            <li>
-              <a 
-                href="#contact" 
-                className={currentView === 'contact' ? 'active' : ''}
-                onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}
-              >
-                Contact
-              </a>
-            </li>
 
             {user ? (
               <li className={`nav-user ${userDropdownOpen ? 'open' : ''}`}>
@@ -87,8 +66,8 @@ export default function Header({ currentView, setCurrentView }) {
                   className="nav-user-trigger"
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                 >
-                  <span>Welcome, <strong>{user.username}</strong></span>
-                  <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>▾</span>
+                  Welcome, {user.username}
+                  <span className="nav-user-caret">▾</span>
                 </button>
                 <ul className="nav-user-menu">
                   {isAdmin ? (
@@ -115,7 +94,7 @@ export default function Header({ currentView, setCurrentView }) {
                           href="#cart" 
                           onClick={(e) => { e.preventDefault(); navigateTo('user-dashboard', { tab: 'cart' }); }}
                         >
-                          <span>My Cart</span>
+                          My Cart
                           <span className={`cart-badge ${count ? '' : 'is-empty'}`}>
                             {count}
                           </span>
@@ -139,7 +118,7 @@ export default function Header({ currentView, setCurrentView }) {
                       </li>
                     </>
                   )}
-                  <li style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: '4px', paddingTop: '4px' }}>
+                  <li>
                     <a 
                       href="#logout" 
                       onClick={(e) => { 
@@ -147,9 +126,8 @@ export default function Header({ currentView, setCurrentView }) {
                         logout(); 
                         navigateTo('home'); 
                       }}
-                      style={{ color: '#f87171' }}
                     >
-                      Sign Out
+                      Logout
                     </a>
                   </li>
                 </ul>

@@ -5,12 +5,11 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Menu({ onNavigate }) {
   const { user } = useAuth();
-  const { addToCart, count } = useCart();
+  const { addToCart } = useCart();
 
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState({});
   const [toastMessage, setToastMessage] = useState(null);
@@ -21,7 +20,7 @@ export default function Menu({ onNavigate }) {
         setLoading(true);
         const [cats, menuData] = await Promise.all([
           api.getCategories(),
-          api.getMenu(activeCategory, searchQuery)
+          api.getMenu(activeCategory, '')
         ]);
         setCategories(cats || []);
         setItems(menuData || []);
@@ -32,7 +31,7 @@ export default function Menu({ onNavigate }) {
       }
     }
     loadMenu();
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory]);
 
   const handleSizeChange = (itemId, size) => {
     setSelectedSizes(prev => ({ ...prev, [itemId]: size }));
@@ -40,7 +39,7 @@ export default function Menu({ onNavigate }) {
 
   const handleAddToCart = async (item) => {
     if (!user) {
-      alert('Please sign in to place items in your Stand!');
+      alert('Please sign in to add items to your cart!');
       onNavigate('login');
       return;
     }
@@ -49,8 +48,8 @@ export default function Menu({ onNavigate }) {
 
     try {
       await addToCart(item.id, size, 1);
-      setToastMessage(`✨ Added "${item.name}" (${size}) to your Stand!`);
-      setTimeout(() => setToastMessage(null), 3200);
+      setToastMessage(`✓ Added "${item.name}" to your order!`);
+      setTimeout(() => setToastMessage(null), 3000);
     } catch (err) {
       alert(err.message || 'Failed to add item');
     }
@@ -66,103 +65,43 @@ export default function Menu({ onNavigate }) {
 
   return (
     <section className="menu-layer">
+      <div className="menu-overlay-gradient"></div>
       <div className="container menu-content-wrapper">
         
-        {/* Floating Toast Notification */}
+        {/* Toast Alert */}
         {toastMessage && (
           <div style={{
             position: 'fixed',
-            bottom: '24px',
-            right: '24px',
-            background: '#1a0826',
-            color: '#fbbf24',
-            border: '2px solid #fbbf24',
-            fontWeight: '700',
+            bottom: '30px',
+            right: '30px',
+            background: 'var(--accent-yellow)',
+            color: '#1e1032',
+            fontWeight: 'bold',
             padding: '14px 24px',
-            borderRadius: '16px',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.8)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px'
+            borderRadius: '12px',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+            zIndex: 9999
           }}>
-            <span>{toastMessage}</span>
-            <button
-              onClick={() => onNavigate('user-dashboard', { tab: 'cart' })}
-              style={{
-                background: '#fbbf24',
-                color: '#1a0826',
-                border: 'none',
-                padding: '4px 12px',
-                borderRadius: '8px',
-                fontWeight: '800',
-                cursor: 'pointer'
-              }}
-            >
-              View Cart ({count})
-            </button>
+            {toastMessage}
           </div>
         )}
 
-        {/* Menu Header */}
         <div className="menu-header">
-          <span className="menacing-stamp" style={{ marginBottom: '12px' }}>杜王町 · 名物メニュー</span>
-          <h3 className="section-title">
+          <h3 className="section-title reveal-on-scroll is-visible">
             Our <span className="text-highlight">Legendary Menu</span>
           </h3>
-          <p className="menu-intro">
-            Taste the adventure with our Stand-infused delicacies — from Stardust cold brews to Golden Wind Italian espressos and restorative croffles.
+          <p className="menu-intro reveal-on-scroll is-visible">
+            Taste the adventure with our Stand-infused delicacies. From Stardust brews to Diamond-unbreakable croffles.
           </p>
-
-          {/* Search Bar */}
-          <div style={{ marginTop: '24px', maxWidth: '420px', margin: '24px auto 0', position: 'relative' }}>
-            <input
-              type="text"
-              placeholder="Search Stand brews, croffles, pasta..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '12px 18px 12px 42px',
-                borderRadius: '30px',
-                background: 'rgba(19, 9, 36, 0.9)',
-                border: '1px solid var(--border-card)',
-                color: '#fff',
-                fontSize: '0.95rem',
-                outline: 'none'
-              }}
-            />
-            <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }}>
-              🔍
-            </span>
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                style={{
-                  position: 'absolute',
-                  right: '14px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'var(--text-muted)',
-                  cursor: 'pointer'
-                }}
-              >
-                ✕
-              </button>
-            )}
-          </div>
         </div>
 
-        {/* Category Filters */}
-        <div className="filters">
+        <div className="filters reveal-on-scroll is-visible">
           <div className="filter-group">
             <button
               className={`pill ${activeCategory === 'All' ? 'active' : ''}`}
               onClick={() => setActiveCategory('All')}
             >
-              All Stand Treats
+              All
             </button>
             {categories.map((cat) => (
               <button
@@ -176,30 +115,19 @@ export default function Menu({ onNavigate }) {
           </div>
         </div>
 
-        {/* Menu Items Catalog */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
-            <p style={{ fontSize: '1.2rem', fontFamily: 'var(--font-display)' }}>Summoning Stand Brews...</p>
+          <div className="empty-box reveal-on-scroll is-visible">
+            Loading menu items...
           </div>
         ) : Object.keys(itemsByCategory).length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
-            <p style={{ fontSize: '1.1rem' }}>No menacing items found for "{searchQuery || activeCategory}".</p>
-            <button 
-              onClick={() => { setActiveCategory('All'); setSearchQuery(''); }}
-              style={{ marginTop: '12px', padding: '8px 18px', borderRadius: '8px', background: 'var(--gold-light)', color: '#1a0826', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
-            >
-              Reset Filters
-            </button>
+          <div className="empty-box reveal-on-scroll is-visible">
+            No items found in this category.
           </div>
         ) : (
           <div className="menu-grid-container">
             {Object.entries(itemsByCategory).map(([cat, catItems]) => (
               <div key={cat} className="category-section">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                  <h4 className="category-title" style={{ margin: 0, border: 'none', padding: 0 }}>{cat}</h4>
-                  <span className="menacing-stamp" style={{ fontSize: '0.75rem' }}>{catItems.length} items</span>
-                </div>
-
+                <h4 className="category-title reveal-on-scroll is-visible">{cat}</h4>
                 <div className="items-grid">
                   {catItems.map((it) => {
                     const isJoestarBlend = cat === 'Joestar Blends';
@@ -209,16 +137,18 @@ export default function Menu({ onNavigate }) {
                     const price16 = isJoestarBlend ? 159.0 : isMixedHamon ? 139.0 : Number(it.price);
                     const price22 = isJoestarBlend ? 179.0 : isMixedHamon ? 159.0 : 0.0;
                     const curSize = selectedSizes[it.id] || '16oz';
-                    const curDisplayPrice = (hasSizes && curSize === '22oz') ? price22 : price16;
 
                     return (
-                      <div key={it.id} className="menu-item-card">
-                        
+                      <div key={it.id} className="menu-item-card reveal-on-scroll is-visible">
                         <div className="item-header">
                           <h5 className="item-name">{it.name}</h5>
-                          <span className="item-price">
-                            ₱{curDisplayPrice.toFixed(2)}
-                          </span>
+                          {hasSizes ? (
+                            <span className="item-price">
+                              16oz ₱{price16.toFixed(2)} &nbsp;·&nbsp; 22oz ₱{price22.toFixed(2)}
+                            </span>
+                          ) : (
+                            <span className="item-price">₱{Number(it.price).toFixed(2)}</span>
+                          )}
                         </div>
 
                         {it.description && (
@@ -227,52 +157,26 @@ export default function Menu({ onNavigate }) {
 
                         {hasSizes && (
                           <div className="item-size-row">
-                            <label className="item-size-label">Cup Size:</label>
-                            <div style={{ display: 'flex', gap: '6px' }}>
-                              <button
-                                type="button"
-                                onClick={() => handleSizeChange(it.id, '16oz')}
-                                style={{
-                                  padding: '4px 10px',
-                                  borderRadius: '6px',
-                                  fontSize: '0.8rem',
-                                  fontWeight: '700',
-                                  cursor: 'pointer',
-                                  border: curSize === '16oz' ? '1px solid var(--gold-light)' : '1px solid var(--border-card)',
-                                  background: curSize === '16oz' ? 'rgba(245, 158, 11, 0.2)' : 'transparent',
-                                  color: curSize === '16oz' ? 'var(--gold-light)' : 'var(--text-dim)'
-                                }}
-                              >
-                                16oz (₱{price16.toFixed(0)})
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => handleSizeChange(it.id, '22oz')}
-                                style={{
-                                  padding: '4px 10px',
-                                  borderRadius: '6px',
-                                  fontSize: '0.8rem',
-                                  fontWeight: '700',
-                                  cursor: 'pointer',
-                                  border: curSize === '22oz' ? '1px solid var(--gold-light)' : '1px solid var(--border-card)',
-                                  background: curSize === '22oz' ? 'rgba(245, 158, 11, 0.2)' : 'transparent',
-                                  color: curSize === '22oz' ? 'var(--gold-light)' : 'var(--text-dim)'
-                                }}
-                              >
-                                22oz (₱{price22.toFixed(0)})
-                              </button>
-                            </div>
+                            <label className="item-size-label" htmlFor={`size-${it.id}`}>Size</label>
+                            <select
+                              id={`size-${it.id}`}
+                              className="item-size-select"
+                              value={curSize}
+                              onChange={(e) => handleSizeChange(it.id, e.target.value)}
+                            >
+                              <option value="16oz">16oz — ₱{price16.toFixed(2)}</option>
+                              <option value="22oz">22oz — ₱{price22.toFixed(2)}</option>
+                            </select>
                           </div>
                         )}
 
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto', paddingTop: '10px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 'auto', width: '100%' }}>
                           <button
                             type="button"
-                            className="btn-add"
+                            className="btn-add add-to-cart-btn"
                             onClick={() => handleAddToCart(it)}
-                            style={{ width: '100%' }}
                           >
-                            + Add to Stand
+                            Add to Order
                           </button>
                         </div>
                       </div>

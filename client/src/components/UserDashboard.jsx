@@ -4,15 +4,15 @@ import { useCart } from '../context/CartContext';
 import { api } from '../services/api';
 
 const STANDS = [
-  'Star Platinum (スタープラチナ)',
-  'Crazy Diamond (クレイジー・ダイヤモンド)',
-  'Gold Experience (ゴールド・エクスペリエンス)',
-  'Stone Free (ストーン・フリー)',
-  'Hermit Purple (ハーミット・パープル)',
-  'The World (ザ・ワールド)',
-  'Silver Chariot (シルバーチャリオッツ)',
-  'Killer Queen (キラークイーン)',
-  'Sticky Fingers (スティッキィ・フィンガーズ)'
+  'Star Platinum',
+  'Crazy Diamond',
+  'Gold Experience',
+  'Stone Free',
+  'Hermit Purple',
+  'The World',
+  'Silver Chariot',
+  'Killer Queen',
+  'Sticky Fingers'
 ];
 
 export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
@@ -22,7 +22,7 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
-  const [profile, setProfile] = useState({ full_name: '', phone: '', address: '', favorite_stand: 'Star Platinum (スタープラチナ)' });
+  const [profile, setProfile] = useState({ full_name: '', phone: '', address: '', favorite_stand: 'Star Platinum' });
   const [profileLoading, setProfileLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
@@ -66,7 +66,7 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
     if (items.length === 0) return;
     try {
       const res = await checkout();
-      setMessage({ type: 'success', text: `✓ ${res.message || 'Transmission sent! Order placed with Tonio\'s kitchen.'}` });
+      setMessage({ type: 'success', text: `✓ ${res.message || 'Order placed successfully!'}` });
       setActiveTab('orders');
     } catch (err) {
       setMessage({ type: 'error', text: err.message || 'Failed to place order.' });
@@ -77,7 +77,7 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
     e.preventDefault();
     try {
       await api.updateProfile(profile);
-      setMessage({ type: 'success', text: '✓ Stand Master Profile updated!' });
+      setMessage({ type: 'success', text: '✓ Profile details saved!' });
       setTimeout(() => setMessage(null), 3000);
     } catch (err) {
       setMessage({ type: 'error', text: err.message || 'Failed to update profile.' });
@@ -85,42 +85,42 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
   };
 
   return (
-    <div className="dashboard-container" style={{ paddingTop: '5rem', paddingBottom: '5rem', minHeight: '80vh' }}>
+    <div className="dashboard-container" style={{ paddingTop: '6rem', paddingBottom: '4rem', minHeight: '80vh' }}>
       <main className="dashboard-content container">
         
         {/* Navigation Tabs */}
-        <div className="filters" style={{ marginBottom: '35px' }}>
+        <div className="filters" style={{ marginBottom: '30px' }}>
           <div className="filter-group">
             <button
               className={`pill ${activeTab === 'cart' ? 'active' : ''}`}
               onClick={() => { setActiveTab('cart'); setMessage(null); }}
             >
-              🛒 My Stand Cart ({count})
+              My Cart ({count})
             </button>
             <button
               className={`pill ${activeTab === 'orders' ? 'active' : ''}`}
               onClick={() => { setActiveTab('orders'); setMessage(null); }}
             >
-              📜 Order Transmissions ({orders.length})
+              Order History
             </button>
             <button
               className={`pill ${activeTab === 'profile' ? 'active' : ''}`}
               onClick={() => { setActiveTab('profile'); setMessage(null); }}
             >
-              ★ Stand Master Settings
+              Profile &amp; Settings
             </button>
           </div>
         </div>
 
         {message && (
           <div style={{
-            padding: '14px 20px',
-            borderRadius: '12px',
-            marginBottom: '24px',
-            background: message.type === 'success' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+            padding: '12px 18px',
+            borderRadius: '8px',
+            marginBottom: '20px',
+            background: message.type === 'success' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)',
             border: `1px solid ${message.type === 'success' ? '#22c55e' : '#ef4444'}`,
             color: message.type === 'success' ? '#4ade80' : '#f87171',
-            fontWeight: '700'
+            fontWeight: 'bold'
           }}>
             {message.text}
           </div>
@@ -130,28 +130,21 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
         {activeTab === 'cart' && (
           <div className="dash-view active">
             <div className="menu-header" style={{ marginTop: 0, textAlign: 'left', marginBottom: '25px' }}>
-              <span className="menacing-stamp" style={{ marginBottom: '8px' }}>現在の注文</span>
-              <h3 className="section-title">My Stand <span className="text-highlight">Cart</span></h3>
-              <p className="menu-intro">Confirm your order items before sending to Tonio's kitchen.</p>
+              <h3 className="section-title">My <span className="text-highlight">Cart</span></h3>
+              <p className="menu-intro">Review your selected items and place your order.</p>
             </div>
 
             {items.length === 0 ? (
-              <div className="login-card" style={{ maxWidth: '600px', margin: '40px auto', textAlign: 'center' }}>
-                <span style={{ fontSize: '3rem', display: 'block', marginBottom: '12px' }}>☕</span>
-                <h4 style={{ color: 'var(--gold-light)', fontSize: '1.4rem', marginBottom: '8px' }}>Your Stand is Empty</h4>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>Explore our menu and summon your favorite anime-inspired brews.</p>
-                <button 
-                  onClick={() => onNavigate('menu')} 
-                  className="btn-app-store"
-                  style={{ border: 'none', margin: '0 auto' }}
-                >
-                  <span className="small-text">Explore Menu</span>
-                  <span className="big-text">View Stand Brews ➔</span>
+              <div className="empty-box" style={{ textAlign: 'center', padding: '50px 20px' }}>
+                <p style={{ fontSize: '1.1rem', marginBottom: '15px' }}>Your cart is currently empty.</p>
+                <button onClick={() => onNavigate('menu')} className="btn-app-store" style={{ display: 'inline-block' }}>
+                  <span className="small-text">Browse</span>
+                  <span className="big-text">Order Menu</span>
                 </button>
               </div>
             ) : (
-              <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-card)', borderRadius: '20px', padding: '30px', boxShadow: '0 20px 50px rgba(0,0,0,0.6)' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '30px' }}>
+              <div style={{ background: 'var(--card-bg)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '25px', boxShadow: '0 15px 35px rgba(0,0,0,0.5)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '25px' }}>
                   {items.map((it) => (
                     <div
                       key={it.id}
@@ -159,46 +152,43 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        flexWrap: 'wrap',
-                        gap: '14px',
-                        padding: '16px 20px',
-                        borderRadius: '14px',
-                        background: 'rgba(0,0,0,0.3)',
-                        border: '1px solid var(--border-subtle)'
+                        padding: '12px 16px',
+                        borderRadius: '8px',
+                        background: 'rgba(0,0,0,0.4)',
+                        border: '1px solid rgba(255,255,255,0.08)'
                       }}
                     >
                       <div>
-                        <h4 style={{ color: '#fff', margin: '0 0 4px', fontSize: '1.15rem' }}>{it.name}</h4>
-                        <span style={{ color: 'var(--gold-light)', fontSize: '0.88rem', fontWeight: '700' }}>
+                        <h4 style={{ color: '#fff', margin: '0 0 4px', fontSize: '1.1rem' }}>{it.name}</h4>
+                        <span style={{ color: 'var(--pink)', fontSize: '0.85rem', fontWeight: 'bold' }}>
                           {it.size} · ₱{Number(it.unit_price).toFixed(2)} each
                         </span>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                        {/* Quantity Stepper */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#0e051c', padding: '4px 8px', borderRadius: '10px', border: '1px solid var(--border-card)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <button
                             onClick={() => updateQty(it.id, it.qty - 1)}
-                            style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'rgba(255,255,255,0.08)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: '800' }}
+                            style={{ width: '28px', height: '28px', borderRadius: '4px', background: 'rgba(255,255,255,0.1)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
                           >
                             -
                           </button>
-                          <span style={{ color: '#fff', fontWeight: '800', minWidth: '24px', textAlign: 'center' }}>{it.qty}</span>
+                          <span style={{ color: '#fff', fontWeight: 'bold', minWidth: '20px', textAlign: 'center' }}>{it.qty}</span>
                           <button
                             onClick={() => updateQty(it.id, it.qty + 1)}
-                            style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'var(--gold-light)', color: '#1a0826', border: 'none', cursor: 'pointer', fontWeight: '800' }}
+                            style={{ width: '28px', height: '28px', borderRadius: '4px', background: 'var(--accent-yellow)', color: '#1e1032', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
                           >
                             +
                           </button>
                         </div>
 
-                        <span style={{ color: 'var(--gold-light)', fontWeight: '800', minWidth: '90px', textAlign: 'right', fontSize: '1.15rem' }}>
+                        <span style={{ color: 'var(--accent-yellow)', fontWeight: 'bold', minWidth: '80px', textAlign: 'right', fontSize: '1.05rem' }}>
                           ₱{Number(it.subtotal).toFixed(2)}
                         </span>
 
                         <button
                           onClick={() => removeItem(it.id)}
-                          style={{ background: 'transparent', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '1.2rem' }}
+                          style={{ background: 'transparent', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '1.1rem' }}
                           title="Remove item"
                         >
                           ✕
@@ -208,29 +198,26 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
                   ))}
                 </div>
 
-                {/* Receipt Summary Footer */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderTop: '1px solid var(--border-card)', paddingTop: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px' }}>
                   <div>
-                    <span style={{ color: 'var(--text-dim)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Order Total</span>
-                    <h3 style={{ color: 'var(--gold-light)', fontSize: '2.2rem', margin: '2px 0 0' }}>
+                    <span style={{ color: 'var(--muted)', fontSize: '0.95rem' }}>Total Amount:</span>
+                    <h3 style={{ color: 'var(--accent-yellow)', fontSize: '1.8rem', margin: '4px 0 0' }}>
                       ₱{Number(total).toFixed(2)}
                     </h3>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '14px' }}>
+                  <div style={{ display: 'flex', gap: '12px' }}>
                     <button
                       onClick={clearCart}
-                      style={{ padding: '12px 20px', borderRadius: '12px', background: 'transparent', border: '1px solid var(--border-card)', color: 'var(--text-muted)', cursor: 'pointer', fontWeight: '600' }}
+                      style={{ padding: '10px 18px', borderRadius: '6px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'var(--muted)', cursor: 'pointer' }}
                     >
                       Clear Cart
                     </button>
                     <button
                       onClick={handleCheckout}
-                      className="btn-app-store"
-                      style={{ border: 'none' }}
+                      style={{ padding: '12px 28px', borderRadius: '6px', background: 'var(--accent-yellow)', color: '#1e1032', border: 'none', fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem' }}
                     >
-                      <span className="small-text">Tonio's Kitchen</span>
-                      <span className="big-text">Place Order ➔</span>
+                      Place Order
                     </button>
                   </div>
                 </div>
@@ -243,64 +230,58 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
         {activeTab === 'orders' && (
           <div className="dash-view active">
             <div className="menu-header" style={{ marginTop: 0, textAlign: 'left', marginBottom: '25px' }}>
-              <span className="menacing-stamp" style={{ marginBottom: '8px' }}>過去の注文履歴</span>
-              <h3 className="section-title">Order <span className="text-highlight">Transmissions</span></h3>
-              <p className="menu-intro">Track the status of your Stand beverages in Morioh.</p>
+              <h3 className="section-title">Order <span className="text-highlight">History</span></h3>
+              <p className="menu-intro">Track your previous orders and their current status.</p>
             </div>
 
             {ordersLoading ? (
-              <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>Loading transmissions...</div>
+              <div className="empty-box">Loading orders...</div>
             ) : orders.length === 0 ? (
-              <div className="login-card" style={{ maxWidth: '600px', margin: '40px auto', textAlign: 'center' }}>
-                <h4 style={{ color: 'var(--gold-light)', fontSize: '1.3rem', marginBottom: '8px' }}>No Transmissions Found</h4>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '20px' }}>You haven't ordered from the Morioh Grand Café yet.</p>
-                <button onClick={() => onNavigate('menu')} className="btn-add" style={{ padding: '10px 24px' }}>
-                  Browse Menu ➔
-                </button>
+              <div className="empty-box" style={{ textAlign: 'center', padding: '50px 20px' }}>
+                <p>You have not placed any orders yet.</p>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                 {orders.map((ord) => (
                   <div
                     key={ord.id}
                     style={{
-                      background: 'var(--bg-card)',
-                      border: '1px solid var(--border-card)',
-                      borderRadius: '18px',
-                      padding: '24px',
-                      boxShadow: '0 12px 30px rgba(0,0,0,0.4)'
+                      background: 'var(--card-bg)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '10px',
+                      padding: '20px'
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '14px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '10px' }}>
                       <div>
-                        <strong style={{ color: '#fff', fontSize: '1.2rem' }}>Transmission #{ord.id}</strong>
-                        <span style={{ color: 'var(--text-dim)', fontSize: '0.88rem', marginLeft: '14px' }}>
+                        <strong style={{ color: '#fff', fontSize: '1.1rem' }}>Order #{ord.id}</strong>
+                        <span style={{ color: 'var(--muted)', fontSize: '0.85rem', marginLeft: '12px' }}>
                           {new Date(ord.created_at).toLocaleString()}
                         </span>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                         <span style={{
-                          padding: '4px 12px',
-                          borderRadius: '20px',
+                          padding: '3px 10px',
+                          borderRadius: '12px',
                           fontSize: '0.8rem',
-                          fontWeight: '800',
+                          fontWeight: 'bold',
                           textTransform: 'uppercase',
-                          background: ord.status === 'completed' ? 'rgba(34,197,94,0.2)' : ord.status === 'revoked' ? 'rgba(239,68,68,0.2)' : 'rgba(245,158,11,0.2)',
-                          color: ord.status === 'completed' ? '#4ade80' : ord.status === 'revoked' ? '#f87171' : 'var(--gold-light)',
-                          border: `1px solid ${ord.status === 'completed' ? '#22c55e' : ord.status === 'revoked' ? '#ef4444' : 'var(--gold-border)'}`
+                          background: ord.status === 'completed' ? 'rgba(34,197,94,0.2)' : ord.status === 'revoked' ? 'rgba(239,68,68,0.2)' : 'rgba(234,179,8,0.2)',
+                          color: ord.status === 'completed' ? '#4ade80' : ord.status === 'revoked' ? '#f87171' : '#fde047',
+                          border: `1px solid ${ord.status === 'completed' ? '#22c55e' : ord.status === 'revoked' ? '#ef4444' : '#eab308'}`
                         }}>
-                          {ord.status === 'processed' ? '☕ Brewing...' : ord.status}
+                          {ord.status}
                         </span>
-                        <span style={{ color: 'var(--gold-light)', fontWeight: '900', fontSize: '1.3rem' }}>
+                        <span style={{ color: 'var(--accent-yellow)', fontWeight: 'bold', fontSize: '1.15rem' }}>
                           ₱{Number(ord.total).toFixed(2)}
                         </span>
                       </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '10px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
                       {ord.items?.map((it, idx) => (
-                        <div key={idx} style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+                        <div key={idx} style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
                           • {it.qty}x {it.item_name} {it.size ? `(${it.size})` : ''} — ₱{Number(it.item_price * it.qty).toFixed(2)}
                         </div>
                       ))}
@@ -316,51 +297,54 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
         {activeTab === 'profile' && (
           <div className="dash-view active">
             <div className="menu-header" style={{ marginTop: 0, textAlign: 'left', marginBottom: '25px' }}>
-              <span className="menacing-stamp" style={{ marginBottom: '8px' }}>スタンド使いの情報</span>
-              <h3 className="section-title">Stand Master <span className="text-highlight">Settings</span></h3>
-              <p className="menu-intro">Customize your identity, delivery destination, and guardian Stand.</p>
+              <h3 className="section-title">Profile &amp; <span className="text-highlight">Settings</span></h3>
+              <p className="menu-intro">Update your contact and delivery preferences.</p>
             </div>
 
-            <div className="login-card" style={{ maxWidth: '600px', margin: 0 }}>
+            <div style={{ maxWidth: '550px', background: 'var(--card-bg)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '30px' }}>
               {profileLoading ? (
-                <p style={{ color: 'var(--text-muted)' }}>Loading Stand specs...</p>
+                <p style={{ color: 'var(--muted)' }}>Loading profile...</p>
               ) : (
-                <form onSubmit={handleProfileSubmit}>
+                <form onSubmit={handleProfileSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                   <div className="form-group">
-                    <label>Full Stand Master Name</label>
+                    <label style={{ display: 'block', marginBottom: '5px', color: 'var(--muted)' }}>Full Name</label>
                     <input
                       type="text"
                       value={profile.full_name || ''}
                       onChange={(e) => setProfile({ ...profile, full_name: e.target.value })}
                       placeholder="e.g. Demi Elago"
+                      style={{ width: '100%', padding: '10px', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff' }}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label>Phone Number</label>
+                    <label style={{ display: 'block', marginBottom: '5px', color: 'var(--muted)' }}>Phone Number</label>
                     <input
                       type="text"
                       value={profile.phone || ''}
                       onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                       placeholder="e.g. 09123456789"
+                      style={{ width: '100%', padding: '10px', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff' }}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label>Delivery Address (Morioh or Beyond)</label>
+                    <label style={{ display: 'block', marginBottom: '5px', color: 'var(--muted)' }}>Delivery Address</label>
                     <textarea
                       rows="2"
                       value={profile.address || ''}
                       onChange={(e) => setProfile({ ...profile, address: e.target.value })}
-                      placeholder="Street, City, Province..."
+                      placeholder="Enter address in Morioh..."
+                      style={{ width: '100%', padding: '10px', borderRadius: '4px', background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff' }}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label>Guardian Stand</label>
+                    <label style={{ display: 'block', marginBottom: '5px', color: 'var(--muted)' }}>Favorite Stand</label>
                     <select
-                      value={profile.favorite_stand || 'Star Platinum (スタープラチナ)'}
+                      value={profile.favorite_stand || 'Star Platinum'}
                       onChange={(e) => setProfile({ ...profile, favorite_stand: e.target.value })}
+                      style={{ width: '100%', padding: '10px', borderRadius: '4px', background: '#1e1032', border: '1px solid var(--accent-yellow)', color: '#fff' }}
                     >
                       {STANDS.map((st) => (
                         <option key={st} value={st}>{st}</option>
@@ -370,10 +354,9 @@ export default function UserDashboard({ initialTab = 'cart', onNavigate }) {
 
                   <button
                     type="submit"
-                    className="btn-login"
-                    style={{ marginTop: '10px' }}
+                    style={{ marginTop: '10px', padding: '12px', background: 'var(--accent-yellow)', color: '#1e1032', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem' }}
                   >
-                    Save Stand Profile
+                    Save Changes
                   </button>
                 </form>
               )}
