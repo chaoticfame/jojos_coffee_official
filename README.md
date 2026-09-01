@@ -36,15 +36,3 @@ npm run dev
 
 * **Frontend**: `http://localhost:3001`
 * **Backend API**: `http://localhost:5001`
-
----
-
-## 🔑 Default Accounts
-
-| Role | Username | Password | Email |
-|---|---|---|---|
-| **Admin** | `admin` | `admin123` | `speedwagon@foundation.org` |
-| **Customer** | `demi_elago` | `demi123` | `demi@jojocafe.com` |
-| **Customer** | `demsdemi` | `demi123` | `demsdemi@jojocafe.com` |
-| **Customer** | `AngwyBean` | `testing` | `angwy@bean.com` |
-| **Customer** | `Angel` | `testing123` | `angel@jojo.com` |

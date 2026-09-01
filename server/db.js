@@ -68,20 +68,6 @@ export function initDb() {
     );
   `);
 
-  // Seed sample users if empty
-  const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
-  if (userCount === 0) {
-    const insertUser = db.prepare('INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)');
-    
-    // admin
-    insertUser.run('admin', bcrypt.hashSync('admin123', 10), 'speedwagon@foundation.org', 'admin');
-    // customers
-    insertUser.run('demi_elago', bcrypt.hashSync('demi123', 10), 'demi@jojocafe.com', 'user');
-    insertUser.run('demsdemi', bcrypt.hashSync('demi123', 10), 'demsdemi@jojocafe.com', 'user');
-    insertUser.run('AngwyBean', bcrypt.hashSync('testing', 10), 'angwy@bean.com', 'user');
-    insertUser.run('Angel', bcrypt.hashSync('testing123', 10), 'angel@jojo.com', 'user');
-  }
-
   // Seed menu items if empty
   const menuCount = db.prepare('SELECT COUNT(*) as count FROM menu_items').get().count;
   if (menuCount === 0) {
